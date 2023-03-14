@@ -25,3 +25,4 @@ hs_err_pid*
 # manual
 .DS_Store
 .idea/
+out/
