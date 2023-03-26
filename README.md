@@ -1,2 +1,2 @@
-# lox-java
-com.lox.Lox implementation in java
+# LoxJava
+Lox implementation in java

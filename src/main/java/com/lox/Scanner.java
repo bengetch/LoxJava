@@ -60,10 +60,16 @@ class Scanner {
     }
 
     private void addToken(TokenType type) {
+        /*
+        addToken function for non literal type tokens
+         */
         addToken(type, null);
     }
 
     private void addToken(TokenType type, Object literal) {
+        /*
+        addToken function for literal type tokens
+         */
         String text = source.substring(start, current);
         tokens.add(new Token(type, text, literal, line));
     }
