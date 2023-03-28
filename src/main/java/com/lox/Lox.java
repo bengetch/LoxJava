@@ -40,21 +40,39 @@ public class Lox {
             System.out.print("> ");
             String line = reader.readLine();
             if (line == null) break;
-            run(line);
+            // If input is an expression, display its value before running it
+            List<Stmt> statements = parseSource(line);
+
+            // If an error is raised, display error and return empty prompt
+            if (!hadError) {
+                evaluateAndDisplayExpr(statements);
+                // Run input
+                interpreter.interpret(statements);
+            }
             hadError = false;
         }
     }
 
+    private static void evaluateAndDisplayExpr(List<Stmt> statements) {
+        for (Stmt statement: statements) {
+            if (statement instanceof Stmt.Expression) {
+                Object value = interpreter.evaluate(((Stmt.Expression) statement).expression);
+                System.out.println(value);
+            }
+        }
+    }
+
     private static void run(String source) {
+        List<Stmt> statements = parseSource(source);
+        if (hadError) return;
+        interpreter.interpret(statements);
+    }
+
+    private static List<Stmt> parseSource(String source) {
         Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();
         Parser parser = new Parser(tokens);
-        List<Stmt> statements = parser.parse();
-
-        // Stop if there was a syntax error
-        if (hadError) return;
-
-        interpreter.interpret(statements);
+        return parser.parse();
     }
 
     static void error(int line, String message) {
