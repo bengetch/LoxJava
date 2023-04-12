@@ -45,9 +45,13 @@ public class Lox {
 
             // If an error is raised, display error and return empty prompt
             if (!hadError) {
-                evaluateAndDisplayExpr(statements);
-                // Run input
-                interpreter.interpret(statements);
+                try {
+                    evaluateAndDisplayExpr(statements);
+                    // Run input
+                    interpreter.interpret(statements);
+                } catch (RuntimeError error) {
+                    runtimeError(error);
+                }
             }
             hadError = false;
         }
