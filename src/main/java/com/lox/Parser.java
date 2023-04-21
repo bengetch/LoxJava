@@ -57,7 +57,7 @@ public class Parser {
             error(previous(), "Must be inside a loop to use 'break'.");
         }
         consume(SEMICOLON, "Expect ';' after 'break'.");
-        return new Stmt.Break();
+        return new Stmt.Break(previous());
     }
 
     private Stmt forStatement() {
