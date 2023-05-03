@@ -164,6 +164,22 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     public Void visitClassStmt(Stmt.Class stmt) {
         environment.define(stmt.name.lexeme, null);
 
+        Map<String, LoxFunction> classMethods = new HashMap<>();
+        for (Stmt.Function method : stmt.classMethods) {
+            LoxFunction function = new LoxFunction(
+                    method.name.lexeme,
+                    method.function,
+                    environment,
+                    false
+            );
+            classMethods.put(method.name.lexeme, function);
+        }
+        LoxClass metaclass = new LoxClass(
+                null,
+                stmt.name.lexeme + " metaclass",
+                classMethods
+        );
+
         Map<String, LoxFunction> methods = new HashMap<>();
         for (Stmt.Function method : stmt.methods) {
             LoxFunction function = new LoxFunction(
@@ -175,7 +191,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             methods.put(method.name.lexeme, function);
         }
 
-        LoxClass cls = new LoxClass(stmt.name.lexeme, methods);
+        LoxClass cls = new LoxClass(metaclass, stmt.name.lexeme, methods);
         environment.assign(stmt.name, cls);
         return null;
     }

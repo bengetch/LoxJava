@@ -104,7 +104,6 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
 
         beginScope();
         scopes.peek().put("this", true);
-
         for (Stmt.Function method : stmt.methods) {
             FunctionType declaration = FunctionType.METHOD;
             if (method.name.lexeme.equals("init")) {
@@ -113,6 +112,14 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
             resolveFunction(method.function, declaration);
         }
         endScope();
+
+        for (Stmt.Function method : stmt.classMethods) {
+            beginScope();
+            scopes.peek().put("this", true);
+            resolveFunction(method.function, FunctionType.METHOD);
+            endScope();
+        }
+
         currentClass = enclosingClass;
         return null;
     }
