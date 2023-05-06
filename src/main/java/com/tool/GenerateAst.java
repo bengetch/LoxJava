@@ -2,6 +2,7 @@ package com.tool;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,13 +23,15 @@ public class GenerateAst {
                 "Literal    : Object value",
                 "Logical    : Expr left, Token operator, Expr right",
                 "Set        : Expr object, Token name, Expr value",
+                "Super      : Token keyword, Token method",
                 "This       : Token keyword",
                 "Variable   : Token name",
                 "Unary      : Token operator, Expr right"
         ));
         defineAst(outputDir, "Stmt", Arrays.asList(
                 "Block      : List<Stmt> statements",
-                "Class      : Token name, List<Stmt.Function> methods, List<Stmt.Function> classMethods",
+                "Class      : Token name, Expr.Variable superclass, List<Stmt.Function> methods, " +
+                        "List<Stmt.Function> classMethods",
                 "Break      : Token keyword",
                 "Expression : Expr expression",
                 "Function   : Token name, Expr.Function function",
@@ -44,7 +47,7 @@ public class GenerateAst {
             String outputDir, String baseName, List<String> types
     ) throws IOException {
         String path = outputDir + "/" + baseName + ".java";
-        PrintWriter writer = new PrintWriter(path, "UTF-8");
+        PrintWriter writer = new PrintWriter(path, StandardCharsets.UTF_8);
 
         writer.println("package com.lox;");
         writer.println();
