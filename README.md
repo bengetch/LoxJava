@@ -1,5 +1,5 @@
 # LoxJava
-Lox implementation in java
+Java implementation of the Lox programming language from the book [Crafting Interpreters](http://craftinginterpreters.com/)
 
 
 ## Requirements
